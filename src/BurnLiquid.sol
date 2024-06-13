@@ -20,5 +20,17 @@ contract BurnLiquid {
          *     to: recipient address to receive tokenA and tokenB.
          */
         // your code here
+
+    // Get the pool contract
+    IUniswapV2Pair poolContract = IUniswapV2Pair(pool);
+
+    uint256 liquidity = IERC20(pool).balanceOf(address(this));
+
+    // Approve the pool to spend the liquidity tokens
+    IERC20(pool).approve(pool, liquidity);
+
+    // Burn the liquidity tokens and receive the underlying assets (USDC and ETH)
+    poolContract.burn(address(this));
+
     }
 }
