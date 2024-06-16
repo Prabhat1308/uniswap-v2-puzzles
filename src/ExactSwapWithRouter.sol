@@ -18,17 +18,26 @@ contract ExactSwapWithRouter {
     }
 
     function performExactSwapWithRouter(address weth, address usdc) public {
-        /**
-         *     swap(uint256 amount0Out, uint256 amount1Out, address to, bytes calldata data);
-         *
-         *     amount0Out: the amount of USDC to receive from swap.
-         *     amount1Out: the amount of WETH to receive from swap.
-         *     to: recipient address to receive the USDC tokens.
-         *     data: leave it empty.
-         *
-         */
+        IUniswapV2Router _router = IUniswapV2Router(router);
 
-        // your code start here
+        uint amountIn = 1 ether;
+
+        // Define the path for WETH to USDC swap
+        address[] memory path = new address[](2);
+        path[0] = weth;
+        path[1] = usdc;
+
+        // Approve the router to spend the WETH
+        IERC20(weth).approve(router, amountIn);
+
+        // Perform the swap
+        _router.swapExactTokensForTokens(
+            amountIn,
+            1337 * 1e6,
+            path,
+            address(this),
+            block.timestamp + 1000
+        );
     }
 }
 

@@ -7,7 +7,7 @@ import "./interfaces/IERC20.sol";
  *
  *  ARBITRAGE A POOL
  *
- * Given two pools where the token pair represents the same underlying; WETH/USDC and WETH/USDT (the formal has the corect price, while the latter doesnt).
+ * Given two pools where the token pair represents the same underlying; WETH/USDC and WETH/USDT (the forMER has the corect price, while the latter doesnt).
  * The challenge is to flash borrowing some USDC (>1000) from `flashLenderPool` to arbitrage the pool(s), then make profit by ensuring MyMevBot contract's USDC balance
  * is more than 0.
  *
@@ -27,15 +27,24 @@ contract MyMevBot {
         usdt = _usdt;
         router = _router;
     }
-
+    
+    /* 
+    Approach:
+    1. Borrow USDC from flashLenderPool
+    
+    */
     function performArbitrage() public {
         // your code here
+         
     }
-
+    
+    //This will be called by the flashLenderPool
     function uniswapV3FlashCallback(uint256 _fee0, uint256, bytes calldata data) external {
         callMeCallMe();
 
         // your code start here
+
+
     }
 
     function callMeCallMe() private {
