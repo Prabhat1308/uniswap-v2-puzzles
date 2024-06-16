@@ -28,6 +28,7 @@ contract BurnLiquid {
 
     // Approve the pool to spend the liquidity tokens
     IERC20(pool).approve(pool, liquidity);
+    IERC20(pool).transfer(pool, liquidity);
 
     // Burn the liquidity tokens and receive the underlying assets (USDC and ETH)
     poolContract.burn(address(this));

